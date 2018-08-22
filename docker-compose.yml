@@ -1,14 +1,20 @@
-docker-compose.yml:
+version: '2.1'
 services:
   zentao:
-    image: hofmann/zentao
+    image: registry.docker-cn.com/hofmann/zentao
+    ports:
+      - "${LAN_IP}:${HOST_PORT}:80"
+    environment:
+      - TZ=Asia/Shanghai
     restart: always
     networks:
       frontend_zentao:
       backend_zentao:
     volumes:
+      - /etc/localtime:/etc/localtime:ro
       - volume_zentao_data:/opt/zbox
-
+      - "$SOURCE_LIST_PATH:/etc/apt/sources.list:ro"
+    entrypoint: /usr/local/bin//entrypoint.sh
 
 networks:
   frontend_zentao:
@@ -16,4 +22,3 @@ networks:
 
 volumes:
   volume_zentao_data:
-
